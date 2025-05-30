@@ -50,6 +50,7 @@ class Student(Base):
     file_number9 = Column(String, nullable=True)
     file_number10 = Column(String, nullable=True)
     file_number11 = Column(String, nullable=True)
+    file_number12 = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.datetime.now)
     updated_at = Column(DateTime,default=datetime.datetime.now)
     password_valid = Column(Boolean, nullable=True)

@@ -1,13 +1,43 @@
 import datetime
 
+from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
 from app.core.security import get_password_hash, verify_password
 from app.models.user import Student
 from app.schemas.student import StudentInfoSchema
 
+
 def get_student_by_username(db: Session, student_id: str):
     return db.query(Student).filter(Student.student_id_number == student_id).first()
+
+
+def get_students(db: Session):
+    return db.query(Student).all()
+
+
+def update_student(db: Session, student_id_number: str, file_url: str, file_number: int):
+    """Update the student's file URL in the database."""
+    _student = get_student_by_username(db=db, student_id=student_id_number)
+    if not _student:
+        raise HTTPException(status_code=404, detail="Student not found")
+
+    # Ensure file_number is in the valid range
+    if file_number < 1 or file_number > 12:
+        raise HTTPException(status_code=400, detail="file_number must be between 1 and 12")
+
+    # Determine which file number field to update
+    file_field = f"file_number{file_number}"
+
+    # Ensure the column exists in the student model
+    if not hasattr(_student, file_field):
+        raise HTTPException(status_code=400, detail=f"Invalid file number: {file_number}")
+
+    setattr(_student, file_field, file_url)  # Update the field with the file URL
+
+    db.commit()
+    db.refresh(_student)
+    return _student
 
 
 def create_student(db: Session, student: StudentInfoSchema, password: str):
@@ -54,7 +84,9 @@ def create_student(db: Session, student: StudentInfoSchema, password: str):
         if student.file_number10 is not None:
             existing_student.file_number10 = student.file_number10
         if student.file_number11 is not None:
-            existing_student.file_number11 = student.file_number11
+            existing_student.file_number11 = student.file_number11,
+        if student.file_number12 is not None:
+            existing_student.file_number12 = student.file_number12
 
         existing_student.address = student.address
         existing_student.validateUrl = student.validateUrl
