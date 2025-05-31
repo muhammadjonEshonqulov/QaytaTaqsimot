@@ -18,7 +18,7 @@ def login_for_access_token(db: Session, username: str, password: str):
         if not user:
             return None
         token = create_access_token(data={"login": user.login, "role": "user"})
-        return {"role": "user", "access_token": token}
+        return {"role": user.role, "access_token": token}
 
     # Aks holda student login
     return student_login_flow(db, username, password)
