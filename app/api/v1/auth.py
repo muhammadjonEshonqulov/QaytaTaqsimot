@@ -38,10 +38,13 @@ async def get_current_user_info(
         user_data = get_user_by_username(db, user_id)
     else:
         raise HTTPException(status_code=422, detail='Role noto‘g‘ri')
-
     if not user_data:
         raise HTTPException(status_code=404, detail='Foydalanuvchi topilmadi')
 
+    user_data_dict = user_data.__dict__.copy()
+
+    if role == 'student':
+        user_data_dict["role"] = role
     return Response(
-        code=200, success=True, message="User info", data=user_data
+        code=200, success=True, message="User info", data=user_data_dict
     ).model_dump()

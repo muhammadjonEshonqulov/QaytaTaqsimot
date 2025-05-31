@@ -163,6 +163,7 @@ class StudentInfoSchema(BaseModel):
     file_number9: Optional[str] = None
     file_number10: Optional[str] = None
     file_number11: Optional[str] = None
+    file_number12: Optional[str] = None
 
     phone: Optional[str] = None
     gender: Optional[CodeNameModel] = None
