@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api.v1 import auth, student
+from sqlalchemy.testing.suite.test_reflection import users
+
+from app.api.v1 import auth, student, user
 from app.deps.db import init_db
 
 # DB ni boshlang'ich sozlash
@@ -26,6 +28,6 @@ app.add_middleware(
 
 # Include routers
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["auth"])
-# Add other routers (e.g., student) if needed
-# app.include_router(student.router, prefix="/api/v1/student", tags=["student"])
+
 app.include_router(student.router, prefix="/api/v1/student", tags=["student"])
+app.include_router(user.router, prefix="/api/v1/user", tags=["student"])

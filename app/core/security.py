@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 # config (yaxshisi .env dan o'qilsa)
 SECRET_KEY = "my_qayta_secret_key_taqsimot"
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

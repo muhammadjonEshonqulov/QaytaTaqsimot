@@ -26,6 +26,8 @@ class Student(Base):
     first_name = Column(String, nullable=True)
     second_name = Column(String, nullable=True)
     third_name = Column(String, nullable=True)
+    status = Column(String, default="new", nullable=False)
+    appeal = Column(Boolean, default=False, nullable=False)
     password = Column(String)
     full_name = Column(String, nullable=True)
     short_name = Column(String, nullable=True)
@@ -70,3 +72,15 @@ class Student(Base):
     district = Column(JSON, nullable=True)
     socialCategory = Column(JSON, nullable=True)
     accommodation = Column(JSON, nullable=True)
+
+class Scores(Base):
+    __tablename__ = "scores"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    student_id_number = Column(String, nullable=True)
+    score = Column(Integer, nullable=True)
+    file_number = Column(Integer, nullable=True)
+    file_url = Column(String, nullable=True)
+    checker_id = Column(UUID, nullable=True)
+    created_at = Column(String, default=datetime.datetime.now)
+    updated_at = Column(String)

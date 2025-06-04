@@ -4,12 +4,44 @@ from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
 from app.core.security import get_password_hash, verify_password
-from app.models.user import Student
+from app.models.user import Student, Scores
 from app.schemas.student import StudentInfoSchema
 
 
 def get_student_by_username(db: Session, student_id: str):
     return db.query(Student).filter(Student.student_id_number == student_id).first()
+
+def get_user_by_routes(db: Session):
+    _students = db.query(Student).all()
+    _scores = db.query(Scores).all()
+
+    # score lookup: kalitlar = (student_id_number, file_number) lekin string sifatida
+    score_lookup = {
+        (score.student_id_number, str(score.file_number)): score.score
+        for score in _scores
+    }
+
+    students = []
+    for student in _students:
+
+        new_student = Student(
+            short_name=student.short_name,
+            student_id_number=student.student_id_number,
+            status=student.status,
+            appeal=student.appeal,
+        )
+
+        # for route in routes:
+        #     file_number = getattr(student, f'file_number{route}', None)
+        #     setattr(new_student, f'file_number{route}', file_number)
+        #
+        #     # file_number int bo‘lishi mumkin, biz uni str bilan taqqoslaymiz
+        #     score = score_lookup.get((student.student_id_number, str(route)))
+        #     setattr(new_student, f'file_number{route}_score', score)
+
+        students.append(new_student)
+
+    return students
 
 
 def get_students(db: Session):
