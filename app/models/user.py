@@ -18,6 +18,7 @@ class User(Base):
     created_at = Column(String, default=datetime.datetime.now)
     updated_at = Column(String)
 
+
 class Student(Base):
     __tablename__ = "students"
 
@@ -33,9 +34,19 @@ class Student(Base):
     short_name = Column(String, nullable=True)
     image = Column(String, nullable=True)
     birth_date = Column(Integer, nullable=True)
+    social_score = Column(Integer, nullable=True)
+    academic_score = Column(Integer, nullable=True)
     passport_pin = Column(String, nullable=True)
     passport_number = Column(String, nullable=True)
     email = Column(String, nullable=True)
+    academic_com_note = Column(String, nullable=True)
+    academic_app_note = Column(String, nullable=True)
+    academic_com_file = Column(String, nullable=True)
+    academic_app_file = Column(String, nullable=True)
+    social_com_note = Column(String, nullable=True)
+    social_app_note = Column(String, nullable=True)
+    social_com_file = Column(String, nullable=True)
+    social_app_file = Column(String, nullable=True)
     phone = Column(String, nullable=True)
     university = Column(String, nullable=True)
     address = Column(String, nullable=True)
@@ -54,7 +65,7 @@ class Student(Base):
     file_number11 = Column(String, nullable=True)
     file_number12 = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.datetime.now)
-    updated_at = Column(DateTime,default=datetime.datetime.now)
+    updated_at = Column(DateTime, default=datetime.datetime.now)
     password_valid = Column(Boolean, nullable=True)
     gender = Column(JSON, nullable=True)
     specialty = Column(JSON, nullable=True)
@@ -73,6 +84,7 @@ class Student(Base):
     socialCategory = Column(JSON, nullable=True)
     accommodation = Column(JSON, nullable=True)
 
+
 class Scores(Base):
     __tablename__ = "scores"
 
@@ -84,3 +96,6 @@ class Scores(Base):
     checker_id = Column(UUID, nullable=True)
     created_at = Column(String, default=datetime.datetime.now)
     updated_at = Column(String)
+
+    class Config:
+        orm_mode = True

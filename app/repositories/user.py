@@ -13,6 +13,11 @@ from app.schemas.user import ScoreSchema
 def get_user_by_username(db: Session, login: str):
     return db.query(User).filter(User.login == login).first()
 
+
+def get_score_by_user(db: Session, login: str):
+    return db.query(Scores).filter(Scores.student_id_number == login).all()
+
+
 def create_score(db: Session, score: ScoreSchema):
     _deadline = db.query(Deadlines).filter(Deadlines.deadline_type == 'SCORE').order_by(desc(Deadlines.created_at)).first()
 
@@ -36,7 +41,7 @@ def create_score(db: Session, score: ScoreSchema):
         ).first()
 
         if not existing_score:
-            _score = Scores(
+            existing_score = Scores(
                 student_id_number=score.student_id_number,
                 file_number=score.file_number,
                 score=score.score,
@@ -44,10 +49,8 @@ def create_score(db: Session, score: ScoreSchema):
                 checker_id=score.checker_id,
                 created_at=str(datetime.datetime.now()),
             )
-            db.add(_score)
-            db.commit()
-            db.refresh(_score)
-            return _score
+            db.add(existing_score)
+
 
         else:
             score.updated_at = str(datetime.datetime.now())
@@ -56,6 +59,47 @@ def create_score(db: Session, score: ScoreSchema):
             for field_name, field_value in update_data.items():
                 setattr(existing_score, field_name, field_value)
 
+        db.commit()
+        db.refresh(existing_score)
+
+        count = db.query(Scores).filter(Scores.student_id_number == score.student_id_number).count()
+        print('count', count)
+
+        if count == 12:
+            _student = db.query(Student).filter(Student.student_id_number == score.student_id_number).first()
+
+            from sqlalchemy import func
+
+            summ_scores = db.query(func.sum(Scores.score)) \
+                              .filter(
+                and_(
+                    Scores.student_id_number == score.student_id_number,
+                    Scores.file_number != 12
+                )
+            ).scalar() or 0
+
+            academic_score = db.query(Scores).filter(
+                and_(
+                    Scores.student_id_number == score.student_id_number,
+                    Scores.file_number == 12
+                )
+            ).first().score
+
+            print('academic_score', academic_score)
+            print('summ_scores', summ_scores)
+
+            _student.status = 'scored'
+            _student.social_score = summ_scores / 5
+            _student.academic_score = academic_score if academic_score else 0
+
             db.commit()
-            db.refresh(existing_score)
-            return existing_score
+            db.refresh(_student)
+
+            existing_score = db.query(Scores).filter(
+                and_(
+                    Scores.student_id_number == score.student_id_number,
+                    Scores.file_number == score.file_number
+                )
+            ).first()
+
+        return existing_score
