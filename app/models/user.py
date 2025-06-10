@@ -47,6 +47,10 @@ class Student(Base):
     social_app_note = Column(String, nullable=True)
     social_com_file = Column(String, nullable=True)
     social_app_file = Column(String, nullable=True)
+
+    app_com = Column(String, nullable=True)
+    app_file = Column(String, nullable=True)
+
     phone = Column(String, nullable=True)
     university = Column(String, nullable=True)
     address = Column(String, nullable=True)

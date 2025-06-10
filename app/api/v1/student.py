@@ -174,17 +174,50 @@ async def get_students_route(
     ).model_dump()
 
 
-#
-@router.get("/get_students_with_scores")
-async def get_students_with_scores_route(
+@router.post("/appeal")
+async def set_appeal(
+        app_comment: str = Form(...),
+        app_file: UploadFile = File(...),
+        current_user: dict = Depends(get_current_login),
         db: Session = Depends(get_db),
-        # _=Depends(get_current_login),
 ):
-    _students = get_students_with_scores(db)
-    return Response(
-        code=200,
-        success=True,
-        message="success",
-        data=_students
-        ,
-    ).model_dump()
+    if current_user['role'] != 'student':
+        raise HTTPException(status_code=422, detail="Bunday amalni faqat talaba amalga oshira oladi")
+
+    _student = get_student_by_username(db, current_user['login'])
+    if not _student:
+        raise HTTPException(status_code=404, detail="Talaba topilmadi")
+
+    upload_dir = "files/appeals"
+    os.makedirs(upload_dir, exist_ok=True)
+
+    file_ext = os.path.splitext(app_file.filename)[1]
+    safe_filename = f"{uuid.uuid4()}{file_ext}"
+    file_path = os.path.join(upload_dir, safe_filename)
+
+    with open(file_path, "wb") as f:
+        f.write(await app_file.read())
+
+
+    _student.app_com = app_comment
+    _student.app_file = file_path
+
+
+    db.commit()
+    db.refresh(_student)
+    return Response(code=200, success=True, message="success", data={"message": "Apelatsiyaga izoh va fayl muvaffaqiyatli saqlandi"}).model_dump()
+
+#
+# @router.get("/get_students_with_scores")
+# async def get_students_with_scores_route(
+#         db: Session = Depends(get_db),
+#         # _=Depends(get_current_login),
+# ):
+#     _students = get_students_with_scores(db)
+#     return Response(
+#         code=200,
+#         success=True,
+#         message="success",
+#         data=_students
+#         ,
+#     ).model_dump()

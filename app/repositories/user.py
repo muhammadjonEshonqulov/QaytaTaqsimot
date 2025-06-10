@@ -88,7 +88,7 @@ def create_score(db: Session, score: ScoreSchema):
             print('academic_score', academic_score)
             print('summ_scores', summ_scores)
 
-            _student.status = 'scored'
+            _student.status = 'graded'
             _student.social_score = summ_scores / 5
             _student.academic_score = academic_score if academic_score else 0
 
