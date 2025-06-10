@@ -48,8 +48,11 @@ class Student(Base):
     social_com_file = Column(String, nullable=True)
     social_app_file = Column(String, nullable=True)
 
-    app_com = Column(String, nullable=True)
-    app_file = Column(String, nullable=True)
+    s_app_com = Column(String, nullable=True)
+    s_app_file = Column(String, nullable=True)
+
+    a_app_com = Column(String, nullable=True)
+    a_app_file = Column(String, nullable=True)
 
     phone = Column(String, nullable=True)
     university = Column(String, nullable=True)

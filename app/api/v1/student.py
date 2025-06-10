@@ -178,6 +178,7 @@ async def get_students_route(
 async def set_appeal(
         app_comment: str = Form(...),
         app_file: UploadFile = File(...),
+        type_appeal: str = Form(...),
         current_user: dict = Depends(get_current_login),
         db: Session = Depends(get_db),
 ):
@@ -199,8 +200,14 @@ async def set_appeal(
         f.write(await app_file.read())
 
 
-    _student.app_com = app_comment
-    _student.app_file = file_path
+    if type_appeal == "academic":
+        _student.a_app_com = app_comment
+        _student.a_app_file = file_path
+    if type_appeal == "social":
+        _student.s_app_com = app_comment
+        _student.s_app_file = file_path
+
+
     _student.appeal = True
 
 
