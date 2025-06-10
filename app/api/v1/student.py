@@ -177,7 +177,7 @@ async def get_students_route(
 @router.post("/appeal")
 async def set_appeal(
         app_comment: str = Form(...),
-        app_file: UploadFile = File(...),
+        app_file: UploadFile = File(None),  # Default None, majburiy emas
         type_appeal: str = Form(...),
         current_user: dict = Depends(get_current_login),
         db: Session = Depends(get_db),
@@ -189,32 +189,36 @@ async def set_appeal(
     if not _student:
         raise HTTPException(status_code=404, detail="Talaba topilmadi")
 
-    upload_dir = "/files/appeals"
+    upload_dir = "my_files/appeals"
     os.makedirs(upload_dir, exist_ok=True)
 
-    file_ext = os.path.splitext(app_file.filename)[1]
-    safe_filename = f"{uuid.uuid4()}{file_ext}"
-    file_path = os.path.join(upload_dir, safe_filename)
+    if app_file:  # Faqat fayl yuklangan bo'lsa ishlaydi
+        file_ext = os.path.splitext(app_file.filename)[1]
+        safe_filename = f"{uuid.uuid4()}{file_ext}"
+        file_path = os.path.join(upload_dir, safe_filename)
 
-    with open(file_path, "wb") as f:
-        f.write(await app_file.read())
+        with open(file_path, "wb") as f:
+            f.write(await app_file.read())
 
-
-    if type_appeal == "academic":
-        _student.a_app_com = app_comment
-        _student.a_app_file = file_path
-    if type_appeal == "social":
-        _student.s_app_com = app_comment
-        _student.s_app_file = file_path
-
+        if type_appeal == "academic":
+            _student.a_app_com = app_comment
+            _student.a_app_file = f'/{file_path}'
+        if type_appeal == "social":
+            _student.s_app_com = app_comment
+            _student.s_app_file = f'/{file_path}'
+    else:
+        if type_appeal == "academic":
+            _student.a_app_com = app_comment
+            _student.a_app_file = None  # Fayl yo'qligi uchun None
+        if type_appeal == "social":
+            _student.s_app_com = app_comment
+            _student.s_app_file = None  # Fayl yo'qligi uchun None
 
     _student.appeal = True
-
 
     db.commit()
     db.refresh(_student)
     return Response(code=200, success=True, message="success", data={"message": "Apelatsiyaga izoh va fayl muvaffaqiyatli saqlandi"}).model_dump()
-
 #
 # @router.get("/get_students_with_scores")
 # async def get_students_with_scores_route(

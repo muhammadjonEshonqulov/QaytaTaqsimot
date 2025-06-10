@@ -19,7 +19,6 @@ origins = [
 ]
 
 app.mount("/my_files", StaticFiles(directory="my_files"), name="my_files")
-app.mount("/files", StaticFiles(directory="files"), name="my_files")
 app.mount("/profile_images", StaticFiles(directory="profile_images"), name="profile_images")
 
 # CORS middleware
