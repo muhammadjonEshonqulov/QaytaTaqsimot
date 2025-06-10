@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.testing.suite.test_reflection import users
+from starlette.staticfiles import StaticFiles
 
 from app.api.v1 import auth, student, user
 from app.deps.db import init_db
@@ -16,6 +17,10 @@ origins = [
     "http://localhost:5500",   # optional for local testing
     # "https://yourdomain.com",  # add production origin if needed
 ]
+
+app.mount("/my_files", StaticFiles(directory="my_files"), name="my_files")
+app.mount("/files", StaticFiles(directory="files"), name="my_files")
+app.mount("/profile_images", StaticFiles(directory="profile_images"), name="profile_images")
 
 # CORS middleware
 app.add_middleware(
