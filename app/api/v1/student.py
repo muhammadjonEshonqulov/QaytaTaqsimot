@@ -201,6 +201,7 @@ async def set_appeal(
 
     _student.app_com = app_comment
     _student.app_file = file_path
+    _student.appeal = True
 
 
     db.commit()
