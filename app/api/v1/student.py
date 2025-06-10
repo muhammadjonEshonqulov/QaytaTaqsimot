@@ -188,7 +188,7 @@ async def set_appeal(
     if not _student:
         raise HTTPException(status_code=404, detail="Talaba topilmadi")
 
-    upload_dir = "files/appeals"
+    upload_dir = "/files/appeals"
     os.makedirs(upload_dir, exist_ok=True)
 
     file_ext = os.path.splitext(app_file.filename)[1]

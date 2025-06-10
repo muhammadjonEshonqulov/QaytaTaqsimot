@@ -75,7 +75,7 @@ async def set_comment_to_student(
     if not _student:
         raise HTTPException(status_code=404, detail="Student topilmadi")
 
-    upload_dir = "files/comments"
+    upload_dir = "/files/comments"
     os.makedirs(upload_dir, exist_ok=True)
 
     file_ext = os.path.splitext(com_file.filename)[1]
@@ -116,7 +116,7 @@ async def set_comment_to_student(
     if not _student:
         raise HTTPException(status_code=404, detail="Student topilmadi")
 
-    upload_dir = "files/comments"
+    upload_dir = "/files/comments"
     os.makedirs(upload_dir, exist_ok=True)
 
     file_ext = os.path.splitext(app_file.filename)[1]
