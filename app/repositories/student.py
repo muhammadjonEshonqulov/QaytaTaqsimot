@@ -65,6 +65,10 @@ def get_user_by_routes(db: Session):
             "social_app_note": student.social_app_note,
             "social_com_file": student.social_com_file,
             "social_app_file": student.social_app_file,
+            "s_app_com": student.s_app_com,
+            "s_app_file": student.s_app_file,
+            "a_app_com": student.a_app_com,
+            "a_app_file": student.a_app_file,
             "files": files
         }
 

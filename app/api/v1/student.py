@@ -158,20 +158,20 @@ async def get_student_by_id_route(
 
 #
 #
-@router.get("/get_students")
-async def get_students_route(
-        req: Request,
-        db: Session = Depends(get_db),
-        _=Depends(get_current_login),
-):
-    _students = get_students(db)
-    return Response(
-        code=200,
-        success=True,
-        message="success",
-        data=_students
-        ,
-    ).model_dump()
+# @router.get("/get_students")
+# async def get_students_route(
+#         req: Request,
+#         db: Session = Depends(get_db),
+#         _=Depends(get_current_login),
+# ):
+#     _students = get_students(db)
+#     return Response(
+#         code=200,
+#         success=True,
+#         message="success",
+#         data=_students
+#         ,
+#     ).model_dump()
 
 
 @router.post("/appeal")
