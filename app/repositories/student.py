@@ -69,7 +69,9 @@ def get_user_by_routes(db: Session):
             "s_app_file": student.s_app_file,
             "a_app_com": student.a_app_com,
             "a_app_file": student.a_app_file,
-            "files": files
+            "specialty": student.specialty,
+            "files": files,
+
         }
 
         students.append(student_data)
