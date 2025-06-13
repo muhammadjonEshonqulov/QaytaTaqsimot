@@ -15,6 +15,7 @@ app = FastAPI()
 origins = [
     "http://127.0.0.1:5500",  # your frontend origin (e.g., VS Code Live Server)
     "http://localhost:5500",   # optional for local testing
+    "https://qayta-taqsimot.vercel.app", # Vercel'dagi frontend domeni
     # "https://yourdomain.com",  # add production origin if needed
 ]
 
