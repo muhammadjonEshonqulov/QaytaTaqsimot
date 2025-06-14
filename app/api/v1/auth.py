@@ -11,7 +11,7 @@ from app.deps.db import get_db, get_current_login
 router = APIRouter()
 
 
-@router.post("/login", response_model=TokenResponse)
+@router.post("/login")  # response_model=TokenResponse
 def login(form_data: LoginRequest, db: Session = Depends(get_db)):
     token_data = login_for_access_token(db, form_data.login, form_data.password)
     if not token_data:

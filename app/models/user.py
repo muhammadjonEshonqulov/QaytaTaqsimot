@@ -36,6 +36,7 @@ class Student(Base):
     birth_date = Column(Integer, nullable=True)
     social_score = Column(Integer, nullable=True)
     academic_score = Column(Integer, nullable=True)
+    gpa = Column(String, nullable=True)
     passport_pin = Column(String, nullable=True)
     passport_number = Column(String, nullable=True)
     email = Column(String, nullable=True)

@@ -152,6 +152,7 @@ class StudentInfoSchema(BaseModel):
     passport_pin: Optional[str] = None
     passport_number: Optional[str] = None
     email: Optional[str] = None
+    gpa: Optional[str] = None
     file_number1: Optional[str] = None
     file_number2: Optional[str] = None
     file_number3: Optional[str] = None
