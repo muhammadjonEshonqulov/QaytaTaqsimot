@@ -18,7 +18,7 @@ origins = [
     "http://127.0.0.1:5500",  # your frontend origin (e.g., VS Code Live Server)
     "http://localhost:5500",   # optional for local testing
     "https://qayta-taqsimot.vercel.app", # Vercel'dagi frontend domeni
-    "https://grantlar-taqsimoti.jbnuu.uz/",  # add production origin if needed
+    "https://grantlar-taqsimoti.jbnuu.uz",  # add production origin if needed
 ]
 
 app.mount("/my_files", StaticFiles(directory="my_files"), name="my_files")
