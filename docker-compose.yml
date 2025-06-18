@@ -1,0 +1,50 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    ports:
+      - "${APP_PORT:-8088}:8000"
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    depends_on:
+      pgsql:
+        condition: service_healthy
+    networks:
+      - qayta_taqsimot
+    # Override the CMD for development if needed
+    # command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+
+  pgsql:
+    image: postgres:15
+    environment:
+      PGPASSWORD: 'myPassword'
+      POSTGRES_DB: 'qayta_taqsimot'
+      POSTGRES_USER: 'myuser'
+      POSTGRES_PASSWORD: 'myPassword'
+      TZ: 'Asia/Tashkent'
+    volumes:
+      - qayta_taqsimot-pg:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - qayta_taqsimot
+    healthcheck:
+      # Option 2: Simple healthcheck without specific database/user
+      test: ["CMD-SHELL", "pg_isready -h localhost -p 5432"]
+      retries: 3
+      timeout: 5s
+      interval: 30s
+      start_period: 10s
+
+networks:
+  qayta_taqsimot:
+    driver: bridge
+
+volumes:
+  qayta_taqsimot-pg:
