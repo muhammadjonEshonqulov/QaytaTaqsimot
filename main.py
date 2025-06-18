@@ -36,3 +36,9 @@ app.include_router(auth.router, prefix="/api/v1/auth", tags=["auth"])
 
 app.include_router(student.router, prefix="/api/v1/student", tags=["student"])
 app.include_router(user.router, prefix="/api/v1/user", tags=["student"])
+
+
+import uvicorn
+
+if __name__ == "__main__":
+    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)

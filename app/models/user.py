@@ -34,8 +34,13 @@ class Student(Base):
     short_name = Column(String, nullable=True)
     image = Column(String, nullable=True)
     birth_date = Column(Integer, nullable=True)
+
     social_score = Column(Integer, nullable=True)
     academic_score = Column(Integer, nullable=True)
+
+    aa_social_score = Column(Integer, nullable=True)
+    aa_academic_score = Column(Integer, nullable=True)
+
     gpa = Column(String, nullable=True)
     passport_pin = Column(String, nullable=True)
     passport_number = Column(String, nullable=True)

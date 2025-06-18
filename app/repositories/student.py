@@ -72,6 +72,8 @@ def get_user_by_routes(db: Session):
             "academic_score": student.academic_score,
             "social_score": student.social_score,
             "specialty": student.specialty,
+            "aa_social_score": student.aa_social_score,
+            "aa_academic_score": student.aa_academic_score,
             "files": files,
 
         }

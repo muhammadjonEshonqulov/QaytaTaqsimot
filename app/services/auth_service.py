@@ -63,21 +63,21 @@ def student_login_flow(db: Session, login: str, password: str):
         except Exception as e:
             raise HTTPException(status_code=400, detail=f"Remote data parsing error: {e}")
 
-        if not (
-                student_info.educationForm.name == 'Kunduzgi' and student_info.educationType.name == 'Bakalavr' and student_info.level.name == '1-kurs' and student_info.studentStatus.name == 'O‘qimoqda'):
-            raise HTTPException(status_code=422, detail='Talaba 1-kurs Bakalavr Kunduzgi bo‘lishi kerak va O‘qiyotgan bo‘lishi kerak')
+        # if not (
+        #         student_info.educationForm.name == 'Kunduzgi' and student_info.educationType.name == 'Bakalavr' and student_info.level.name == '1-kurs' and student_info.studentStatus.name == 'O‘qimoqda'):
+        #     raise HTTPException(status_code=422, detail='Talaba 1-kurs Bakalavr Kunduzgi bo‘lishi kerak va O‘qiyotgan bo‘lishi kerak')
 
-        r_gpa = requests.get(remote_gpa_url, headers=headers, timeout=10)
-        if r_gpa.status_code != 200:
-            raise HTTPException(status_code=401, detail="GPA ma'lumotini olishda xatolik")
-
-        gpa_data = r_gpa.json().get("data")
-        for gpa in gpa_data:
-            if gpa['educationYear']['current']:
-                student_info.gpa = gpa['gpa']
-                break
-        if not student_info.gpa or (student_info.gpa < '3.5'):
-            raise HTTPException(status_code=422, detail=f'Sizning GPA eng kamida 3.5 bo‘lishi kerak. Sizning GPA: {student_info.gpa if student_info.gpa is not None else "Mavjud emas"}')
+        # r_gpa = requests.get(remote_gpa_url, headers=headers, timeout=10)
+        # if r_gpa.status_code != 200:
+        #     raise HTTPException(status_code=401, detail="GPA ma'lumotini olishda xatolik")
+        #
+        # gpa_data = r_gpa.json().get("data")
+        # for gpa in gpa_data:
+        #     if gpa['educationYear']['current']:
+        #         student_info.gpa = gpa['gpa']
+        #         break
+        # if not student_info.gpa or (student_info.gpa < '3.5'):
+        #     raise HTTPException(status_code=422, detail=f'Sizning GPA eng kamida 3.5 bo‘lishi kerak. Sizning GPA: {student_info.gpa if student_info.gpa is not None else "Mavjud emas"}')
         # Bazaga yozish
         _student = create_student(db, student_info, password)
 

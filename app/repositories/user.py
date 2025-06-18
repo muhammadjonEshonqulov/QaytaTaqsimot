@@ -18,7 +18,7 @@ def get_score_by_user(db: Session, login: str):
     return db.query(Scores).filter(Scores.student_id_number == login).all()
 
 
-def create_score(db: Session, score: ScoreSchema):
+def create_score(db: Session, score: ScoreSchema, _student: Student):
     _deadline = db.query(Deadlines).filter(Deadlines.deadline_type == 'SCORE').order_by(desc(Deadlines.created_at)).first()
 
     if not _deadline or datetime.datetime.strptime(_deadline.start_time, "%Y-%m-%d %H:%M:%S") > datetime.datetime.now():
@@ -66,8 +66,6 @@ def create_score(db: Session, score: ScoreSchema):
         print('count', count)
 
         if count == 12:
-            _student = db.query(Student).filter(Student.student_id_number == score.student_id_number).first()
-
             from sqlalchemy import func
 
             summ_scores = db.query(func.sum(Scores.score)) \

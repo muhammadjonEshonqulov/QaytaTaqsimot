@@ -46,8 +46,11 @@ async def set_score_to_file(score: ScoreSchema = Body(), db: Session = Depends(g
     elif score.file_number in [12]:
         if not (0 <= score.score <= 80):
             raise HTTPException(status_code=422, detail="Transkript faylga 0 dan 80 gacha ball qo'yilishi kerak")
+    _student = get_student_by_username(db, score.student_id)
+    if _student is None:
+        raise HTTPException(status_code=422, detail="Student not found")
 
-    _score = create_score(db, score)
+    _score = create_score(db, score, _student)
     return Response(code=200, success=True, message="success", data=_score).model_dump()
 
 
@@ -109,6 +112,7 @@ async def set_comment_to_student(
     db.refresh(_student)
     return Response(code=200, success=True, message="success", data={"message": "muvaffaqiyatli saqlandi"}).model_dump()
 
+
 @router.post("/set_com_app_to_student")
 async def set_comment_to_student(
         app_comment: str = Form(None),  # Default None, majburiy emas
@@ -152,6 +156,8 @@ async def set_comment_to_student(
         elif _user.role == "social":
             _student.social_app_note = app_comment or _student.social_app_note
             _student.social_app_file = f'/{file_path}' if app_file else _student.social_app_file
+
+
     else:
         if _user.role == "academic":
             _student.academic_app_note = app_comment or _student.academic_app_note
