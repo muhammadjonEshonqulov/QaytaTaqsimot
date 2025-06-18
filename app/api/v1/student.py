@@ -152,7 +152,7 @@ async def get_student_by_id_route(
         db: Session = Depends(get_db),
         _=Depends(get_current_login),
 ):
-    _student = get_student_by_username(db, student_id)
+    _student = get_student_by_username(db, str(student_id))
     return Response(code=200, success=True, message="success", data=_student).model_dump()
 
 
@@ -215,6 +215,7 @@ async def set_appeal(
             _student.s_app_file = None  # Fayl yo'qligi uchun None
 
     _student.appeal = True
+    _student.status = "new"
 
     db.commit()
     db.refresh(_student)

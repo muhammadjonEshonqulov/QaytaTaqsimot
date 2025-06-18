@@ -46,11 +46,14 @@ async def set_score_to_file(score: ScoreSchema = Body(), db: Session = Depends(g
     elif score.file_number in [12]:
         if not (0 <= score.score <= 80):
             raise HTTPException(status_code=422, detail="Transkript faylga 0 dan 80 gacha ball qo'yilishi kerak")
-    _student = get_student_by_username(db, score.student_id)
+    _student = get_student_by_username(db, score.student_id_number)
     if _student is None:
         raise HTTPException(status_code=422, detail="Student not found")
+    _user = get_user_by_username(db, current_user['login'])
+    if _user is None:
+        raise HTTPException(status_code=422, detail="User not found")
 
-    _score = create_score(db, score, _student)
+    _score = create_score(db, score, _student, _user)
     return Response(code=200, success=True, message="success", data=_score).model_dump()
 
 

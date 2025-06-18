@@ -18,7 +18,7 @@ def get_score_by_user(db: Session, login: str):
     return db.query(Scores).filter(Scores.student_id_number == login).all()
 
 
-def create_score(db: Session, score: ScoreSchema, _student: Student):
+def create_score(db: Session, score: ScoreSchema, _student: Student, _user: User):
     _deadline = db.query(Deadlines).filter(Deadlines.deadline_type == 'SCORE').order_by(desc(Deadlines.created_at)).first()
 
     if not _deadline or datetime.datetime.strptime(_deadline.start_time, "%Y-%m-%d %H:%M:%S") > datetime.datetime.now():
@@ -87,8 +87,14 @@ def create_score(db: Session, score: ScoreSchema, _student: Student):
             print('summ_scores', summ_scores)
 
             _student.status = 'graded'
-            _student.social_score = summ_scores / 5
-            _student.academic_score = academic_score if academic_score else 0
+            if _student.appeal:
+                if _user.role == 'academic':
+                    _student.aa_academic_score = academic_score if academic_score else 0
+                if _user.role == 'social':
+                    _student.aa_social_score = summ_scores / 5
+            else:
+                _student.social_score = summ_scores / 5
+                _student.academic_score = academic_score if academic_score else 0
 
             db.commit()
             db.refresh(_student)
