@@ -11,7 +11,8 @@ from app.repositories.required_list import seed_required_list
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
 
 
-DATABASE_URL = "postgresql://myuser:myPassword@pgsql:5432/qayta_taqsimot"
+# DATABASE_URL = "postgresql://myuser:myPassword@pgsql:5432/qayta_taqsimot"
+DATABASE_URL = "postgresql://myuser:myPassword@localhost:5432/qayta_taqsimot"
 
 # Base = declarative_base()
 engine = create_engine(DATABASE_URL)
