@@ -63,9 +63,15 @@ def student_login_flow(db: Session, login: str, password: str):
         except Exception as e:
             raise HTTPException(status_code=400, detail=f"Remote data parsing error: {e}")
 
-        if not (
-                student_info.educationForm.name == 'Kunduzgi' and student_info.educationType.name == 'Bakalavr' and student_info.level.name == '1-kurs' and student_info.studentStatus.name == 'O‘qimoqda'):
-            raise HTTPException(status_code=422, detail='Talaba 1-kurs Bakalavr Kunduzgi bo‘lishi kerak va O‘qiyotgan bo‘lishi kerak')
+        # Har bir shartni alohida tekshirish
+        if student_info.educationForm.name != 'Kunduzgi':
+            raise HTTPException(status_code=422, detail="Talaba faqat Kunduzgi ta'lim shaklida bo'lishi kerak")
+        if student_info.educationType.name != 'Bakalavr':
+            raise HTTPException(status_code=422, detail="Talaba faqat Bakalavr ta'lim turi bo'lishi kerak")
+        if student_info.level.name != '1-kurs':
+            raise HTTPException(status_code=422, detail="Talaba faqat 1-kurs bo'lishi kerak")
+        if student_info.studentStatus.name != 'O‘qimoqda':
+            raise HTTPException(status_code=422, detail="Talaba faqat O‘qiyotgan holatida bo'lishi kerak")
 
         r_gpa = requests.get(remote_gpa_url, headers=headers, timeout=10)
         if r_gpa.status_code != 200:
@@ -78,6 +84,7 @@ def student_login_flow(db: Session, login: str, password: str):
                 break
         if not student_info.gpa or (student_info.gpa < '3.5'):
             raise HTTPException(status_code=422, detail=f'Sizning GPA balingiz eng kamida 3.5 bo‘lishi kerak. Hozirda sizning GPA balingiz: {student_info.gpa if student_info.gpa is not None else "Mavjud emas"}')
+
         # Bazaga yozish
         _student = create_student(db, student_info, password)
 
