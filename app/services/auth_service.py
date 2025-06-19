@@ -77,7 +77,7 @@ def student_login_flow(db: Session, login: str, password: str):
                 student_info.gpa = gpa['gpa']
                 break
         if not student_info.gpa or (student_info.gpa < '3.5'):
-            raise HTTPException(status_code=422, detail=f'Sizning GPA eng kamida 3.5 bo‘lishi kerak. Sizning GPA: {student_info.gpa if student_info.gpa is not None else "Mavjud emas"}')
+            raise HTTPException(status_code=422, detail=f'Sizning GPA balingiz eng kamida 3.5 bo‘lishi kerak. Hozirda sizning GPA balingiz: {student_info.gpa if student_info.gpa is not None else "Mavjud emas"}')
         # Bazaga yozish
         _student = create_student(db, student_info, password)
 
