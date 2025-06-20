@@ -19,7 +19,7 @@ def login(form_data: LoginRequest, db: Session = Depends(get_db)):
     if not token_data:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
+            detail="Login yoki parol xato",
         )
     return token_data
 
