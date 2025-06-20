@@ -54,8 +54,8 @@ async def get_current_user_info(
         end_time = datetime.strptime(end_time, "%Y-%m-%d %H:%M:%S")
 
     # 5 soat qo‘shish
-    start_time_uz = start_time.strftime("%Y-%m-%d %H:%M:%S")
-    end_time_uz = end_time.strftime("%Y-%m-%d %H:%M:%S")
+    start_time_uz = (start_time + timedelta(hours=5)).strftime("%Y-%m-%d %H:%M:%S")
+    end_time_uz = (end_time+ timedelta(hours=5)).strftime("%Y-%m-%d %H:%M:%S")
 
     deadline2 = {
         "start_time": start_time_uz,
