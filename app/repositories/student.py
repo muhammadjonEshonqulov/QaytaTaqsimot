@@ -125,6 +125,7 @@ def create_student(db: Session, student: StudentInfoSchema, password: str):
         existing_student.full_name = student.full_name
         existing_student.short_name = student.short_name
         existing_student.image = student.image
+        existing_student.gpa = student.gpa
         existing_student.university = student.university
         existing_student.birth_date = student.birth_date
         existing_student.password = get_password_hash(password)
@@ -197,6 +198,7 @@ def create_student(db: Session, student: StudentInfoSchema, password: str):
             student_id_number=student.student_id_number,
             image=student.image,
             university=student.university,
+            gpa=student.gpa,
             birth_date=student.birth_date,
             passport_pin=student.passport_pin,
             file_number1=student.file_number1,
