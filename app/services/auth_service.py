@@ -35,7 +35,7 @@ def student_login_flow(db: Session, login: str, password: str):
     _student = get_student_by_username(db, student_id=login)
 
     # Agar student mavjud emas yoki updated_at eski bo‘lsa → remote tekshiruv
-    if not _student or not _student.updated_at or ((datetime.now().date() - _student.updated_at.date()).days >= 1):
+    if not _student or not _student.updated_at or ((datetime.now().date() - _student.updated_at.date()).days >= 0):
         remote_login_url = "https://student.jbnuu.uz/rest/v1/auth/login"
         remote_me_url = "https://student.jbnuu.uz/rest/v1/account/me"
         remote_gpa_url = "https://student.jbnuu.uz/rest/v1/education/gpa-list"

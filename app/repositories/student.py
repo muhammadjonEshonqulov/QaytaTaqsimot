@@ -181,7 +181,8 @@ def create_student(db: Session, student: StudentInfoSchema, password: str):
         existing_student.socialCategory = student.socialCategory.model_dump() if student.socialCategory else None
         existing_student.accommodation = student.accommodation.model_dump() if student.accommodation else None
         existing_student.updated_at = datetime.datetime.now()
-
+        if not existing_student.created_at:
+            existing_student.created_at = datetime.datetime.now()
         db.commit()
         db.refresh(existing_student)
         return existing_student
