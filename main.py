@@ -5,7 +5,7 @@ import logging
 from sqlalchemy.testing.suite.test_reflection import users
 from starlette.staticfiles import StaticFiles
 
-from app.api.v1 import auth, student, user
+from app.api.v1 import auth, student, user, required_list
 from app.deps.db import init_db
 
 # DB ni boshlang'ich sozlash
@@ -50,6 +50,7 @@ async def global_exception_handler(request: Request, exc: Exception):
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["auth"])
 app.include_router(student.router, prefix="/api/v1/student", tags=["student"])
 app.include_router(user.router, prefix="/api/v1/user", tags=["student"])
+app.include_router(required_list.router, prefix="/api/v1/user", tags=["student"])
 
 import uvicorn
 
