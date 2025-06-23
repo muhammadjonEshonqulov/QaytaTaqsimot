@@ -100,7 +100,7 @@ async def create_upload_files(
     else:
         file_extension = file.filename.split(".")[-1]  # Extract file extension
         file_name_raw = ".".join(file.filename.split(".")[:-1]).strip()  # Get file name without extension
-        file_name = file_name_raw[-5:] if len(file_name_raw) >= 5 else file_name_raw  # Keep last 5 characters
+        file_name = file_name_raw[-10:] if len(file_name_raw) >= 5 else file_name_raw  # Keep last 5 characters
         # Define file path for saving
         file_path = f"{UPLOAD_DIR_FILES}/{student_id}_{file_number}_{file_name}.{file_extension}"
 
@@ -194,8 +194,11 @@ async def set_appeal(
 
     if app_file:  # Faqat fayl yuklangan bo'lsa ishlaydi
         file_ext = os.path.splitext(app_file.filename)[1]
-        safe_filename = f"{uuid.uuid4()}{file_ext}"
+        file_name = os.path.splitext(app_file.filename)[0]
+        file_name_short = file_name[-10:] if len(file_name) >= 5 else file_name
+        safe_filename = f"appeal_{_student.student_id_number}_{file_name_short}{file_ext}"
         file_path = os.path.join(upload_dir, safe_filename)
+
 
         with open(file_path, "wb") as f:
             f.write(await app_file.read())

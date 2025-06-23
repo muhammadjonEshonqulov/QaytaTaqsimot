@@ -93,7 +93,9 @@ async def set_comment_to_student(
         os.makedirs(upload_dir, exist_ok=True)
 
         file_ext = os.path.splitext(com_file.filename)[1]
-        safe_filename = f"{uuid.uuid4()}{file_ext}"
+        file_name = os.path.splitext(com_file.filename)[0]
+        file_name_short = file_name[-10:] if len(file_name) >= 5 else file_name
+        safe_filename = f"comment_{_user.id}_{file_name_short}{file_ext}"
         file_path = os.path.join(upload_dir, safe_filename)
 
         with open(file_path, "wb") as f:
@@ -147,7 +149,9 @@ async def set_comment_to_student(
         os.makedirs(upload_dir, exist_ok=True)
 
         file_ext = os.path.splitext(app_file.filename)[1]
-        safe_filename = f"{uuid.uuid4()}{file_ext}"
+        file_name = os.path.splitext(app_file.filename)[0]
+        file_name_short = file_name[-10:] if len(file_name) >= 5 else file_name
+        safe_filename = f"comment_app_{_user.id}_{file_name_short}{file_ext}"
         file_path = os.path.join(upload_dir, safe_filename)
 
         with open(file_path, "wb") as f:
