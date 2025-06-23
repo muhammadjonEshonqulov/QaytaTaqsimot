@@ -48,7 +48,7 @@ def get_user_by_routes(db: Session):
             })
         files.append({
             "id": 12,
-            "name": 'Transkript',
+            "name": 'Transkript (0-80)',
             "file_url": student.file_number12,
             "score": score_lookup.get((student.student_id_number, str(12)))
         })
