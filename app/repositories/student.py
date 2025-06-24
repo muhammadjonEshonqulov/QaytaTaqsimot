@@ -4,7 +4,7 @@ from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
 from app.core.security import get_password_hash, verify_password
-from app.models.user import Student, Scores
+from app.models.user import Student, Scores, User
 from app.repositories.required_list import get_list
 from app.schemas.student import StudentInfoSchema
 
@@ -13,7 +13,7 @@ def get_student_by_username(db: Session, student_id: str):
     return db.query(Student).filter(Student.student_id_number == student_id).first()
 
 
-def get_user_by_routes(db: Session):
+def get_students_by_routes(db: Session, _user: User):
     _students = db.query(Student).all()
     _scores = db.query(Scores).all()
 
@@ -27,6 +27,8 @@ def get_user_by_routes(db: Session):
 
     students = []
     for student in _students:
+        if _user.role == 'academic' and not student.file_number12:
+            continue
         files = []
 
         for file in required_list:

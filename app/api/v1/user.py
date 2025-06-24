@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status, Body, Form, Uploa
 from fastapi.params import File
 from sqlalchemy.orm import Session
 
-from app.repositories.student import get_student_by_username, get_user_by_routes
+from app.repositories.student import get_student_by_username, get_students_by_routes
 from app.repositories.user import get_user_by_username, create_score, get_score_by_user
 from app.schemas.auth import LoginRequest, TokenResponse
 from app.schemas.response import Response
@@ -19,8 +19,11 @@ async def get_attached_files(db: Session = Depends(get_db), current_user: dict =
         raise HTTPException(status_code=422, detail="Bunday amalni faqat tekshiruvchi amalga oshira oladi")
     else:
         if current_user['login'] is not None:
-            _users = get_user_by_routes(db)
-            return Response(code=200, success=True, message="success", data=_users).model_dump()
+            _user = get_user_by_username(db, current_user['login'])
+            if _user is None:
+                raise HTTPException(status_code=422, detail="User not found")
+            _students = get_students_by_routes(db, _user)
+            return Response(code=200, success=True, message="success", data=_students).model_dump()
         else:
             raise HTTPException(status_code=401, detail="Invalid credentials")
 
