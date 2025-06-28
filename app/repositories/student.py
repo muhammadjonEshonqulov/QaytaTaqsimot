@@ -32,7 +32,7 @@ def get_students_by_routes(db: Session, _user: User):
         files = []
 
         for file in required_list:
-            file_attr_name = f'file_number{file.id}'
+            file_attr_name = f'file_number{file.id+1}'
             file_number_value = getattr(student, file_attr_name, None)
 
             # if file_number_value is not None:
@@ -51,7 +51,7 @@ def get_students_by_routes(db: Session, _user: User):
         files.append({
             "id": 12,
             "name": f'Transkript (0-80){"" if not student.gpa else f", Talaba GPA bali: {student.gpa}"}',
-            "file_url": student.file_number12,
+            "file_url": student.file_number1,
             "score": score_lookup.get((student.student_id_number, str(12)))
         })
         student_data = {

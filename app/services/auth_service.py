@@ -66,8 +66,8 @@ def student_login_flow(db: Session, login: str, password: str):
         # Har bir shartni alohida tekshirish
         if student_info.educationForm.name != 'Kunduzgi':
             raise HTTPException(status_code=422, detail="Talaba faqat Kunduzgi ta'lim shaklida bo'lishi kerak")
-        if student_info.educationType.name != 'Bakalavr':
-            raise HTTPException(status_code=422, detail="Talaba faqat Bakalavr ta'lim turi bo'lishi kerak")
+        # if student_info.educationType.name != 'Bakalavr':
+        #     raise HTTPException(status_code=422, detail="Talaba faqat Bakalavr ta'lim turi bo'lishi kerak")
         if student_info.level.name != '1-kurs':
             raise HTTPException(status_code=422, detail="Talaba faqat 1-kurs bo'lishi kerak")
         if student_info.studentStatus.name != 'O‘qimoqda':
