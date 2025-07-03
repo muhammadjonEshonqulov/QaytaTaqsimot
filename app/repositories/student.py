@@ -27,7 +27,7 @@ def get_students_by_routes(db: Session, _user: User):
 
     students = []
     for student in _students:
-        if _user.role == 'academic' and not student.file_number12:
+        if _user.role == 'academic' and not student.file_number1:
             continue
         files = []
 
