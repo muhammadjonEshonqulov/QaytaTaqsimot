@@ -1,0 +1,6 @@
+#Dump olish
+docker-compose exec pgsql pg_dump -U myuser -d qayta_taqsimot > qayta_taqsimot_dump_202_-__-__.sql
+
+#Dumpni yuklash
+cat qayta_taqsimot_dump | docker exec -i container_name psql -U myuser -d qayta_taqsimot
+
