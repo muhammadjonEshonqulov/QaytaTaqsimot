@@ -1,7 +1,7 @@
 import datetime
 import uuid
 
-from sqlalchemy import Column, Integer, String, ARRAY, DateTime, Boolean, JSON
+from sqlalchemy import Column, Integer, String, ARRAY, DateTime, Boolean, JSON, Numeric
 from app.deps.db import Base
 from sqlalchemy.dialects.postgresql.base import UUID
 
@@ -103,12 +103,9 @@ class Scores(Base):
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     student_id_number = Column(String, nullable=True)
-    score = Column(Integer, nullable=True)
+    score = Column(Numeric(5, 2), default=0.00)
     file_number = Column(Integer, nullable=True)
     file_url = Column(String, nullable=True)
-    checker_id = Column(UUID, nullable=True)
-    created_at = Column(String, default=datetime.datetime.now)
-    updated_at = Column(String)
-
-    class Config:
-        orm_mode = True
+    checker_id = Column(UUID(as_uuid=True), nullable=True)
+    created_at = Column(String, default=lambda: datetime.datetime.now().isoformat())
+    updated_at = Column(String, nullable=True)
