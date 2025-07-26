@@ -192,7 +192,7 @@ async def set_appeal(
     upload_dir = "my_files/appeals"
     os.makedirs(upload_dir, exist_ok=True)
 
-    if app_file:  # Faqat fayl yuklangan bo'lsa ishlaydi
+    if app_file.filename:  # Faqat fayl yuklangan bo'lsa ishlaydi
         file_ext = os.path.splitext(app_file.filename)[1]
         file_name = os.path.splitext(app_file.filename)[0]
         file_name_short = file_name[-10:] if len(file_name) >= 5 else file_name

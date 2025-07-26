@@ -147,7 +147,7 @@ async def set_comment_to_student(
     else:
         raise HTTPException(status_code=400, detail="Student ID kiritilishi kerak")
 
-    if app_file:  # Faqat fayl yuklangan bo'lsa ishlaydi
+    if app_file.filename:  # Faqat fayl yuklangan bo'lsa ishlaydi
         upload_dir = "my_files/comments"
         os.makedirs(upload_dir, exist_ok=True)
 
