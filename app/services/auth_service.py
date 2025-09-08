@@ -34,7 +34,6 @@ def authenticate_user(db: Session, username: str, password: str):
 def student_login_flow(db: Session, login: str, password: str):
     _student = get_student_by_username(db, student_id=login)
 
-    # Agar student mavjud emas yoki updated_at eski bo‘lsa → remote tekshiruv
     if not _student or not _student.updated_at or ((datetime.now().date() - _student.updated_at.date()).days >= 0):
         remote_login_url = "https://student.jbnuu.uz/rest/v1/auth/login"
         remote_me_url = "https://student.jbnuu.uz/rest/v1/account/me"
@@ -51,7 +50,6 @@ def student_login_flow(db: Session, login: str, password: str):
         if not remote_token:
             raise HTTPException(status_code=500, detail="Token topilmadi (remote)")
 
-        # Remote token orqali student ma'lumotlarini olish
         headers = {"Authorization": f"Bearer {remote_token}"}
         r_me = requests.get(remote_me_url, headers=headers, timeout=10)
         if r_me.status_code != 200:
@@ -63,11 +61,9 @@ def student_login_flow(db: Session, login: str, password: str):
         except Exception as e:
             raise HTTPException(status_code=400, detail=f"Remote data parsing error: {e}")
 
-        # Har bir shartni alohida tekshirish
         if student_info.educationForm.name != 'Kunduzgi':
             raise HTTPException(status_code=422, detail="Talaba faqat Kunduzgi ta'lim shaklida bo'lishi kerak")
-        # if student_info.educationType.name != 'Bakalavr':
-        #     raise HTTPException(status_code=422, detail="Talaba faqat Bakalavr ta'lim turi bo'lishi kerak")
+
         if student_info.level.name != '1-kurs':
             raise HTTPException(status_code=422, detail="Talaba faqat 1-kurs bo'lishi kerak")
         if student_info.studentStatus.name != 'O‘qimoqda':
@@ -83,12 +79,11 @@ def student_login_flow(db: Session, login: str, password: str):
                 student_info.gpa = gpa['gpa']
                 break
         if not student_info.gpa or (student_info.gpa < '3.5'):
-            raise HTTPException(status_code=422, detail=f'Sizning GPA balingiz eng kamida 3.5 bo‘lishi kerak. Hozirda sizning GPA balingiz: {student_info.gpa if student_info.gpa is not None else "Mavjud emas"}')
+            raise HTTPException(status_code=422,
+                                detail=f'Sizning GPA balingiz eng kamida 3.5 bo‘lishi kerak. Hozirda sizning GPA balingiz: {student_info.gpa if student_info.gpa is not None else "Mavjud emas"}')
 
-        # Bazaga yozish
         _student = create_student(db, student_info, password)
 
-    # Lokal parol tekshiruvi
     if not verify_password(plain_password=password, hashed_password=_student.password):
         return None
 

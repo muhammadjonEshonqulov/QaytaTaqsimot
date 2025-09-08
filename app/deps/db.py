@@ -7,12 +7,18 @@ from jose import JWTError, jwt
 from app.core.security import SECRET_KEY, ALGORITHM
 from app.deps.base_class import Base
 from app.repositories.required_list import seed_required_list
+import os
+
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
 
 
-DATABASE_URL = "postgresql://myuser:myPassword@pgsql:5432/qayta_taqsimot"
+# DATABASE_URL = "postgresql://myuser:myPassword@pgsql:5432/qayta_taqsimot"
 # DATABASE_URL = "postgresql://myuser:myPassword@localhost:5432/qayta_taqsimot"
+
+DATABASE_URL = f"postgresql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
+
+
 
 # Base = declarative_base()
 engine = create_engine(DATABASE_URL)
